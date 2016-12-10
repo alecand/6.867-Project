@@ -52,3 +52,8 @@ print fitted_SVM.score(X_test,y_test)
 # Accuracy is 0.78 with k=10 and rbf
 # Accuracy is 0.92 with k = 5 and linear kernel
 # Accuracy is 0.9 with k = 5 and rbf
+
+
+# TODO also do this for random forest or decision trees to see if non-linearity helps (SVMs basically only linear)
+	# if you find something that non-linearity helps, can say that that's better for the convolutional neural nets and stuff
+	
