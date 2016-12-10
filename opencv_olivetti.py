@@ -5,8 +5,8 @@ from matplotlib import pyplot as plt
 import sklearn.datasets
 
 ##### Cascade classifier
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-# face_cascade = cv2.CascadeClassifier('haarcascade_profileface.xml') # not very good, but gets a few
+# face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('haarcascade_profileface.xml') # not very good, but gets a few
 # face_cascade = cv2.CascadeClassifier('haarcascade_smile.xml') # Pretty good actually
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 

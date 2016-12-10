@@ -130,11 +130,14 @@ def adaboost(points,classifiers_to_misclassified,num_mistakes_tolerated=0,max_nu
 	if max_num_rounds == float("inf"):
 		max_num_rounds = 100 # hardcoded value
 
+	## New addition
+	original_classifiers_to_misclassified = classifiers_to_misclassified.copy()
+
 	# Main clause of algorithm
 	for i in range(max_num_rounds):
 		# Calculate error rates
-		for i in classifiers_to_misclassified.keys():
-			classifiers_to_error_rate[i] = sum([points_to_weight[j] for j in classifiers_to_misclassified[i]])
+		# for i in classifiers_to_misclassified.keys():
+		# 	classifiers_to_error_rate[i] = sum([points_to_weight[j] for j in classifiers_to_misclassified[i]])
 
 		# Choose classifier with best error rate
 		(classifier,error_rate) = choose_best_classifier(classifiers_to_misclassified,points_to_weight)
@@ -163,13 +166,17 @@ def adaboost(points,classifiers_to_misclassified,num_mistakes_tolerated=0,max_nu
 				points_to_weight[point] = 0.5*points_to_weight[point]/(1.0-error_rate)
 
 		# Check terminating conditions
-		if len(get_incorrect_classifications_overall(H,classifiers_to_misclassified,points)) <= num_mistakes_tolerated:
+		# if len(get_incorrect_classifications_overall(H,classifiers_to_misclassified,points)) <= num_mistakes_tolerated:
+		if len(get_incorrect_classifications_overall(H,original_classifiers_to_misclassified,points)) <= num_mistakes_tolerated:
 			return H
+
+		# NEW ADDITION
+		classifiers_to_misclassified.pop(classifier)
 
 	return H
 
 test_points = test_ids_to_points.keys()
-print 'test_points',test_points
-print 'cf to miss',test_make_classifiers_to_misclassified
-print adaboost(test_points,test_make_classifiers_to_misclassified)
+# print 'test_points',test_points
+# print 'cf to miss',test_make_classifiers_to_misclassified
+# print adaboost(test_points,test_make_classifiers_to_misclassified)
 
