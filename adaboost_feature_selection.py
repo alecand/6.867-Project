@@ -40,7 +40,16 @@ def digits_make_classifiers(X,y):
 		best_cutoff = float('inf')
 		best_feature = lambda x: 1
 		for cutoff in range(int(min(X[:,num_feature])),int(max(X[:,num_feature]))):
+			# Test >=
 			feature = lambda x: x[num_feature] >= cutoff
+			error = test_feature(feature,X,y)
+			# print 'error',error
+			if error < best_error:
+				best_error = error
+				best_cutoff = cutoff
+				best_feature = feature
+			# Test <=
+			feature = lambda x: x[num_feature] <= cutoff
 			error = test_feature(feature,X,y)
 			# print 'error',error
 			if error < best_error:
