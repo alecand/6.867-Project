@@ -8,6 +8,7 @@ import sklearn.datasets
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 # face_cascade = cv2.CascadeClassifier('haarcascade_profileface.xml') # not very good, but gets a few
 # face_cascade = cv2.CascadeClassifier('haarcascade_smile.xml') # Pretty good actually
+# face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml') # doesn't do well on glasses at all
 # eye_cascade = cv2.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml') # Causes python to crash
 
@@ -77,8 +78,10 @@ def run_all_images(image_directory,do_plot):
 	print 'Total number of images: ',num_images
 	return (false_negatives,false_positives,num_images)
 
-# run_all_images('att_faces') # Results: 137 false negatives, 400 total images
-run_all_images('wild_faces',True)
+# run_all_images('att_faces',False) # Results: 137 false negatives, 400 total images with the default
+	# 166 false negatives, 400 total images with the alt
+# run_all_images('../wild_faces',False) # Results: 885 false negatives, 13233 total images
+run_all_images('../bioID_faces',False) # Results: 162 false negatives, 1521 total images 
 
 
 
