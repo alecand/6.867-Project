@@ -8,6 +8,7 @@ import sklearn.datasets
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 # face_cascade = cv2.CascadeClassifier('haarcascade_profileface.xml') # not very good, but gets a few
 # face_cascade = cv2.CascadeClassifier('haarcascade_smile.xml') # Pretty good actually
+# face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml') # doesn't do well on glasses at all
 # eye_cascade = cv2.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml') # Causes python to crash
 
@@ -60,7 +61,7 @@ def run_olivetti_images():
 # run_olivetti_images()
 
 def run_all_images(image_directory,do_plot):
-	# Olivetti images
+	# Face images
 	tmp1,tmp2 = 0,0
 	false_negatives,false_positives = 0,0
 	num_images = 0
@@ -77,9 +78,45 @@ def run_all_images(image_directory,do_plot):
 	print 'Total number of images: ',num_images
 	return (false_negatives,false_positives,num_images)
 
-# run_all_images('att_faces') # Results: 137 false negatives, 400 total images
-run_all_images('wild_faces',True)
+# run_all_images('att_faces',True) # Results: 137 false negatives, 400 total images with the default
+	# 166 false negatives, 400 total images with the alt
+# run_all_images('../wild_faces',False) # Results: 885 false negatives, 13233 total images
+# run_all_images('../bioID_faces',True) # Results: 162 false negatives, 1521 total images -> not doing ppl out of frame
 
+## Prepare flickr data set
+people_list = np.loadtxt('people.txt').astype(int)
+ok_dirs = []
 
+for i in range(1,1001):
+    if not i in people_list:
+        ok_dirs.append(r'Flickr Images/im' + str(i) + '.jpg')
+
+def run_all_images_flickr(faces_dir,do_plot,flickr_list):
+	tmp1,tmp2 = 0,0
+	false_negatives,false_positives = 0,0
+	num_images = 0
+	# Face images
+	for directory in os.listdir(faces_dir):
+		if os.path.isdir(faces_dir+'/'+directory):
+			for filename in os.listdir(faces_dir+'/'+directory):
+				tmp1,tmp2 = cascade_classifier(faces_dir+'/'+directory+'/'+filename,is_face=True,do_plot=do_plot)
+				num_images += 1
+				false_negatives += tmp1
+				false_positives += tmp2
+
+	# Non-face images
+	for filepath in flickr_list:
+		tmp1,tmp2 = cascade_classifier(filepath,is_face=False,do_plot=do_plot)
+		num_images += 1
+		false_negatives += tmp1
+		false_positives += tmp2
+
+	print 'False negatives total: ', false_negatives
+	print 'False positives total: ', false_positives
+	print 'Total number of images: ',num_images
+	return (false_negatives,false_positives,num_images)
+
+run_all_images_flickr('../bioID_faces',False,ok_dirs) # False negatives total:  162, False positives total:  7, Total number of images:  2127
+# (only flickr) 0 false negatives, False positives total:  7, Total number of images:  606
 
 
