@@ -81,10 +81,10 @@ def run_all_images(image_directory,do_plot):
 	print 'Total number of images: ',num_images
 	return (false_negatives,false_positives,num_images)
 
-# run_all_images('att_faces',True) # Results: 137 false negatives, 400 total images with the default
+# run_all_images('att_faces',False) # Results: 137 false negatives, 400 total images with the default
 	# 166 false negatives, 400 total images with the alt
 # run_all_images('../wild_faces',True) # Results: 885 false negatives, 13233 total images
-run_all_images('../bioID_faces',True) # Results: 162 false negatives, 1521 total images -> not doing ppl out of frame
+# run_all_images('../bioID_faces',True) # Results: 162 false negatives, 1521 total images -> not doing ppl out of frame
 
 ## Prepare flickr data set
 people_list = np.loadtxt('people.txt').astype(int)
@@ -121,5 +121,34 @@ def run_all_images_flickr(faces_dir,do_plot,flickr_list):
 
 # run_all_images_flickr('../bioID_faces',False,ok_dirs) # False negatives total:  162, False positives total:  7, Total number of images:  2127
 # (only flickr) 0 false negatives, False positives total:  7, Total number of images:  606
+def run_test_images(faces_dir,do_plot,nonface_dir):
+	tmp1,tmp2 = 0,0
+	false_negatives,false_positives = 0,0
+	num_images = 0
+	# Face images
+	for directory in os.listdir(faces_dir):
+		if os.path.isdir(faces_dir+'/'+directory):
+			for filename in os.listdir(faces_dir+'/'+directory):
+				tmp1,tmp2 = cascade_classifier(faces_dir+'/'+directory+'/'+filename,is_face=True,do_plot=do_plot)
+				num_images += 1
+				false_negatives += tmp1
+				false_positives += tmp2
+
+	# None face images
+	for directory in os.listdir(nonface_dir):
+		if os.path.isdir(nonface_dir+'/'+directory):
+			for filename in os.listdir(nonface_dir+'/'+directory):
+				tmp1,tmp2 = cascade_classifier(nonface_dir+'/'+directory+'/'+filename,is_face=False,do_plot=do_plot)
+				num_images += 1
+				false_negatives += tmp1
+				false_positives += tmp2
+
+	print 'False negatives total: ', false_negatives
+	print 'False positives total: ', false_positives
+	print 'Total number of images: ',num_images
+	return (false_negatives,false_positives,num_images)
 
 
+# run_test_images('att_faces',False,'testbackground')
+# Results # False negatives total:  137, False positives total:  0, Total number of images:  400
+# run_test_images('../bioID_faces',False,'testbackground')
