@@ -80,8 +80,8 @@ def run_all_images(image_directory,do_plot):
 
 # run_all_images('att_faces',True) # Results: 137 false negatives, 400 total images with the default
 	# 166 false negatives, 400 total images with the alt
-# run_all_images('../wild_faces',False) # Results: 885 false negatives, 13233 total images
-# run_all_images('../bioID_faces',True) # Results: 162 false negatives, 1521 total images -> not doing ppl out of frame
+# run_all_images('../wild_faces',True) # Results: 885 false negatives, 13233 total images
+run_all_images('../bioID_faces',True) # Results: 162 false negatives, 1521 total images -> not doing ppl out of frame
 
 ## Prepare flickr data set
 people_list = np.loadtxt('people.txt').astype(int)
@@ -116,7 +116,7 @@ def run_all_images_flickr(faces_dir,do_plot,flickr_list):
 	print 'Total number of images: ',num_images
 	return (false_negatives,false_positives,num_images)
 
-run_all_images_flickr('../bioID_faces',False,ok_dirs) # False negatives total:  162, False positives total:  7, Total number of images:  2127
+# run_all_images_flickr('../bioID_faces',False,ok_dirs) # False negatives total:  162, False positives total:  7, Total number of images:  2127
 # (only flickr) 0 false negatives, False positives total:  7, Total number of images:  606
 
 
