@@ -18,6 +18,9 @@ def cascade_classifier(input_image,is_face,do_plot):
 	# img = cv2.imread('test.jpg')
 	img = cv2.imread(input_image)
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	# print 'gray',gray
+	# print 'gray',gray.shape
+	# print 'gray',type(gray[0][0])
 	# http://stackoverflow.com/questions/30506126/open-cv-error-215-scn-3-scn-4-in-function-cvtcolor
 
 	faces = face_cascade.detectMultiScale(gray, 1.3, 5)
