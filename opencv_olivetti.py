@@ -12,6 +12,12 @@ face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml') # doesn't do well on glasses at all
 # eye_cascade = cv2.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml') # Causes python to crash
 
+def rgb2gray(rgb):
+
+    r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2]
+    gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+
+    return gray
 
 def cascade_classifier(input_image,is_face,do_plot):
 	# print 'input_image',input_image
@@ -81,9 +87,9 @@ def run_all_images(image_directory,do_plot):
 	print 'Total number of images: ',num_images
 	return (false_negatives,false_positives,num_images)
 
-# run_all_images('att_faces',False) # Results: 137 false negatives, 400 total images with the default
+# run_all_images('att_faces',True) # Results: 137 false negatives, 400 total images with the default
 	# 166 false negatives, 400 total images with the alt
-# run_all_images('../wild_faces',True) # Results: 885 false negatives, 13233 total images
+run_all_images('../wild_faces',True) # Results: 885 false negatives, 13233 total images
 # run_all_images('../bioID_faces',True) # Results: 162 false negatives, 1521 total images -> not doing ppl out of frame
 
 ## Prepare flickr data set
@@ -135,13 +141,13 @@ def run_test_images(faces_dir,do_plot,nonface_dir):
 				false_positives += tmp2
 
 	# None face images
-	for directory in os.listdir(nonface_dir):
-		if os.path.isdir(nonface_dir+'/'+directory):
-			for filename in os.listdir(nonface_dir+'/'+directory):
-				tmp1,tmp2 = cascade_classifier(nonface_dir+'/'+directory+'/'+filename,is_face=False,do_plot=do_plot)
-				num_images += 1
-				false_negatives += tmp1
-				false_positives += tmp2
+	# for directory in os.listdir(nonface_dir):
+		# if os.path.isdir(nonface_dir+'/'+directory):
+	for filename in os.listdir(nonface_dir+'/'):
+		tmp1,tmp2 = cascade_classifier(nonface_dir+'/'+filename,is_face=False,do_plot=do_plot)
+		num_images += 1
+		false_negatives += tmp1
+		false_positives += tmp2
 
 	print 'False negatives total: ', false_negatives
 	print 'False positives total: ', false_positives
@@ -149,6 +155,9 @@ def run_test_images(faces_dir,do_plot,nonface_dir):
 	return (false_negatives,false_positives,num_images)
 
 
+# TODO switch false negative and false positive definitions
+
 # run_test_images('att_faces',False,'testbackground')
 # Results # False negatives total:  137, False positives total:  0, Total number of images:  400
 # run_test_images('../bioID_faces',False,'testbackground')
+# run_test_images('olivetti_new',False,'testbackground_new')
